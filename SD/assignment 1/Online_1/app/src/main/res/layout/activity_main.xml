@@ -1,0 +1,75 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp" >
+
+    <TextView
+        android:id="@+id/ob2"
+        android:layout_width="395dp"
+        android:layout_height="wrap_content"
+        android:background="#DE4"
+        android:paddingBottom="20dp"
+        android:text="Example Application"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="331dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ob2"
+        android:layout_toRightOf="@id/name_feild"
+        android:ems="10"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/name"
+        android:layout_width="322dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/email"
+        android:layout_toRightOf="@id/name_feild"
+        android:ems="10"
+        android:inputType="textEmailAddress" />
+
+    <Button
+        android:id="@+id/click"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name"
+
+        android:layout_marginStart="150dp"
+        android:layout_marginTop="143dp"
+
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="50dp"
+        android:text="click" />
+
+    <Button
+        android:id="@+id/press"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/click"
+        android:layout_marginStart="150dp"
+
+        android:text="Press" />
+
+    <TextView
+        android:id="@+id/name_feild"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name: "
+        android:layout_below="@id/email_feild"
+        android:paddingTop="20dp"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/email_feild"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email:"
+        android:layout_below="@id/ob2"
+        android:paddingTop="10dp"
+        android:textSize="20sp" />
+
+</RelativeLayout>

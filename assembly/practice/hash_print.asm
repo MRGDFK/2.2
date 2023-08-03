@@ -1,0 +1,19 @@
+.MODEL SMALL
+.STACK 100H
+.DATA
+MSG DB '##########$'
+.CODE
+MAIN PROC
+    ;INITIALIZE DS
+    MOV AX,@DATA
+    MOV DS,AX
+    ;DISPLAY MESSAGE
+    LEA DX,MSG
+    MOV AH,9
+    INT 21h
+    ;return to DOS
+    MOV AH,4CH
+    INT 21h         ;DOS exit
+    
+MAIN ENDP
+END MAIN

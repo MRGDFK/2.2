@@ -1,0 +1,94 @@
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="510dp"
+        android:layout_height="775dp"
+        android:layout_x="-65dp"
+        android:layout_y="-20dp"
+        android:background="#FFFEFE"
+        app:srcCompat="@drawable/feed_image" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="51dp"
+        android:layout_height="52dp"
+        android:layout_x="14dp"
+        android:layout_y="50dp"
+        app:srcCompat="@drawable/profile" />
+
+    <TextView
+        android:id="@+id/gotoprofile"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_x="70dp"
+        android:layout_y="62dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="mrgadgetfreak"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="57dp"
+        android:layout_height="wrap_content"
+        android:layout_x="70dp"
+        android:layout_y="653dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="Like:"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:typeface="normal" />
+
+    <TextView
+        android:id="@+id/count_like"
+        android:layout_width="57dp"
+        android:layout_height="wrap_content"
+        android:layout_x="120dp"
+        android:layout_y="653dp"
+        android:fontFamily="sans-serif-medium"
+        android:text=""
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:typeface="normal" />
+
+    <ImageButton
+        android:id="@+id/empty_heart"
+        android:layout_width="50dp"
+        android:layout_height="60dp"
+        android:layout_x="15dp"
+        android:layout_y="638dp"
+        android:backgroundTint="#00FFFFFF"
+        android:onClick="Show"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/outline_heart" />
+
+    <ImageButton
+        android:id="@+id/filled_heart"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_x="15dp"
+        android:layout_y="642dp"
+        android:backgroundTint="#00FFFFFF"
+        android:scaleType="fitCenter"
+        android:visibility="invisible"
+        app:srcCompat="@drawable/filled_heart" />
+
+    <Button
+        android:id="@+id/view_image"
+        android:layout_width="70dp"
+        android:layout_height="30dp"
+        android:layout_x="280dp"
+        android:layout_y="580dp"
+        android:backgroundTint="#0DFFFFFF"
+        android:text="VIEW"
+        android:textColor="#CCFFFFFF"
+        android:textSize="8sp" />
+
+</AbsoluteLayout>
