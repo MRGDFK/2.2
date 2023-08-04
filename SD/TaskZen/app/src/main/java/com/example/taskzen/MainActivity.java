@@ -32,7 +32,6 @@ import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    RecyclerView taskRecycler;
 
     FloatingActionButton fab;
     DrawerLayout drawerLayout;
@@ -43,17 +42,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-
-
-
-
-
-
-
-
-
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         fab = findViewById(R.id.fab);
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -75,20 +63,6 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setBackground(null);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
-            /*switch (item.getItemId()) {
-                case R.id.tasks:
-                    replaceFragment(new HomeFragment());
-                    break;
-                case R.id.calendar:
-                    replaceFragment(new Calendar_Fragment());
-                    break;
-                case R.id.pomodoro:
-                    replaceFragment(new Pomodoro_Fragment());
-                    break;
-                case R.id.habits:
-                    replaceFragment(new Habits_Fragment());
-                    break;
-            }*/
             if(id == R.id.tasks){
                 replaceFragment(new HomeFragment());
             }
@@ -176,5 +150,5 @@ public class MainActivity extends AppCompatActivity {
 
     }
     //new
-    
+
 }

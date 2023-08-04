@@ -18,9 +18,7 @@ import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
 
-    private RecyclerView recyclerView;
-    private ArrayList arrayList;
-    private EditText editText;
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -49,10 +47,7 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        recyclerView = (RecyclerView)
-                getView().findViewById(R.id.taskRecycler);
-        arrayList = new ArrayList<String>();
-        arrayList.add("Test Task");
+
     }
 
     @Override
@@ -60,10 +55,6 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
-    }
-    public void addItem (View view){
-        arrayList.add(editText.getText().toString());
-
     }
 
 }
