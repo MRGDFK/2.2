@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "349065268033",
+    "firebase_url": "https://taskzen-f7399-default-rtdb.firebaseio.com",
+    "project_id": "taskzen-f7399",
+    "storage_bucket": "taskzen-f7399.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:349065268033:android:7e6db2e92db9cb3d31afc0",
+        "android_client_info": {
+          "package_name": "com.example.taskzen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "349065268033-d0ja9p7nrlc8c7nnb766ad00l377o9f2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.taskzen",
+            "certificate_hash": "d5c03645385774ff2e87cb1e65f349d6d7f4f24c"
+          }
+        },
+        {
+          "client_id": "349065268033-orfhmv9fduhpu3qctoff5rt6g69k5u29.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFrVUhLIa6fuc-IQGJ11HXf4FapuHVnCA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "349065268033-fkabbjvsgtva0nti138if4a9788v33bc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
