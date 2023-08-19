@@ -79,6 +79,17 @@
             android:id="@+id/fab"
             app:tint="@color/black" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_marginTop="700dp"
+            android:layout_marginLeft="340dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/baseline_logout_24"
+            app:maxImageSize="40dp"
+            android:id="@+id/logout"
+            app:tint="@color/black" />
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

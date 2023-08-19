@@ -1,14 +1,22 @@
 package com.example.taskzen.features;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.taskzen.Adapter.noteAdapter;
+import com.example.taskzen.Model.noteModel;
 import com.example.taskzen.R;
+import com.example.taskzen.notes.utility;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.Query;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,12 +25,12 @@ import com.example.taskzen.R;
  */
 public class Habits_Fragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    RecyclerView notesRecyclerView;
+    noteAdapter noteAdapter;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
+
     private String mParam1;
     private String mParam2;
 
@@ -30,15 +38,6 @@ public class Habits_Fragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Habits_Fragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static Habits_Fragment newInstance(String param1, String param2) {
         Habits_Fragment fragment = new Habits_Fragment();
         Bundle args = new Bundle();
@@ -57,10 +56,47 @@ public class Habits_Fragment extends Fragment {
         }
     }
 
+    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_habits_, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_habits_,container,false);
+        notesRecyclerView = rootView.findViewById(R.id.notesRecycler);
+
+
+
+        setupRecyclerView();
+
+
+
+        return rootView;
+    }
+
+    private void setupRecyclerView() {
+        Query query  = utility.getCollectionReferenceForNotes().orderBy("timestamp", Query.Direction.DESCENDING);
+        FirestoreRecyclerOptions<noteModel> options = new FirestoreRecyclerOptions.Builder<noteModel>()
+                .setQuery(query,noteModel.class).build();
+        notesRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(),RecyclerView.VERTICAL,false));
+        noteAdapter = new noteAdapter(options,requireContext());
+        notesRecyclerView.setAdapter(noteAdapter);
+
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        noteAdapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        noteAdapter.stopListening();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        noteAdapter.notifyDataSetChanged();
     }
 }

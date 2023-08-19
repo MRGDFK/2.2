@@ -11,6 +11,7 @@ import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -77,9 +78,6 @@ public class addTask_Dialog extends AppCompatActivity {
         taskTime = findViewById(R.id.taskTime);
 
 
-
-
-
         taskDate.setOnTouchListener((view, motionEvent) -> {
             if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                 final Calendar c = Calendar.getInstance();
@@ -120,7 +118,6 @@ public class addTask_Dialog extends AppCompatActivity {
                             break;
                     }
 
-
                     taskDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year + "-" + weekDayName);
                 };
 
@@ -132,9 +129,6 @@ public class addTask_Dialog extends AppCompatActivity {
             }
             return true;
         });
-
-
-
 
         taskTime.setOnTouchListener((view, motionEvent) -> {
             if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
@@ -148,10 +142,8 @@ public class addTask_Dialog extends AppCompatActivity {
                         (view12, hourOfDay, minute) -> {
                             taskTime.setText(hourOfDay + ":" + minute);
                             timePickerDialog.dismiss();
-
                         }, mHour, mMinute, false);
                 timePickerDialog.show();
-
             }
             return true;
         });
@@ -172,16 +164,17 @@ public class addTask_Dialog extends AppCompatActivity {
                                 public void onSuccess(DocumentReference documentReference) {
                                     Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                                     findViewById(R.id.successAdd).setVisibility(View.VISIBLE);
+                                    if(taskTime!=null){
+                                        Alarm_set();
+                                    }
 
                                     handler.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
 
-
                                             finish();
                                         }
                                     },2000);
-
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -195,9 +188,55 @@ public class addTask_Dialog extends AppCompatActivity {
             }
         });
 
+    }
+    public void Alarm_set(){
+
+        String[] items1 = taskDate.getText().toString().split("-");
+        String dd = items1[0];
+        String month = items1[1];
+        String year = items1[2];
+
+        String[] itemTime = taskTime.getText().toString().split(":");
+        String hour = itemTime[0];
+        String min = itemTime[1];
+
+        Calendar cur_cal = new GregorianCalendar();
+        cur_cal.setTimeInMillis(System.currentTimeMillis());
+
+        Calendar cal = new GregorianCalendar();
+        cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hour));
+        cal.set(Calendar.MINUTE, Integer.parseInt(min));
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        cal.set(Calendar.DATE, Integer.parseInt(dd));
+
+         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+         Intent intent = new Intent(this,Alarm.class);
+         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, count, intent, PendingIntent.FLAG_IMMUTABLE);
+        // alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,cal.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
+         Toast.makeText(this,"Task Reminder is set",Toast.LENGTH_SHORT).show();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+            } else {
+                alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+            }
+            count ++;
+
+            PendingIntent pendingIntent1 = PendingIntent.getBroadcast(this, count, intent, PendingIntent.FLAG_IMMUTABLE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis() - 600000, pendingIntent1);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis() - 600000, pendingIntent1);
+                } else {
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis() - 600000, pendingIntent1);
+                }
+            }
+            count ++;
+        }
 
     }
-
 
 
 }

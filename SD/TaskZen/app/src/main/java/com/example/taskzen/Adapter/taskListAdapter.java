@@ -29,7 +29,7 @@ public class taskListAdapter extends RecyclerView.Adapter<taskListAdapter.ViewHo
     private ArrayList<taskModel> taskDataset;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView taskTitle,taskStatus,dayInfo,dateInfo,monInfo;
+        private final TextView taskTitle,taskStatus,dayInfo,dateInfo,monInfo,timeinfo;
 
         CardView container;
         CheckBox taskCheckbox;
@@ -45,6 +45,7 @@ public class taskListAdapter extends RecyclerView.Adapter<taskListAdapter.ViewHo
             monInfo = (TextView) view.findViewById(R.id.month);
             container = (CardView) view.findViewById(R.id.task_container);
             taskCheckbox = (CheckBox) view.findViewById(R.id.task_checker);
+            timeinfo = (TextView) view.findViewById(R.id.time);
 
         }
 
@@ -71,6 +72,7 @@ public class taskListAdapter extends RecyclerView.Adapter<taskListAdapter.ViewHo
 
             String date="",mon,yea,wee;
             viewHolder.taskTitle.setText(taskDataset.get(position).getTaskName());
+            viewHolder.timeinfo.setText(taskDataset.get(position).getTaskTime());
             viewHolder.taskStatus.setText(taskDataset.get(position).getTaskStatus());
             String[] dateReVango = taskDataset.get(position).getTaskDate().split("-");
             if (dateReVango.length >= 4) { // Check if the array has enough elements
@@ -78,9 +80,6 @@ public class taskListAdapter extends RecyclerView.Adapter<taskListAdapter.ViewHo
                   mon = dateReVango[1];
                   yea = dateReVango[2];
                   wee = dateReVango[3];
-                System.out.println(mon);
-                System.out.println(wee);
-
 
                 String month = "";
                 String week = "";
@@ -91,7 +90,6 @@ public class taskListAdapter extends RecyclerView.Adapter<taskListAdapter.ViewHo
                 else{
                     viewHolder.dateInfo.setText(String.valueOf(date));
                 }
-
 
                 switch (mon) {
                     case "":
@@ -140,7 +138,6 @@ public class taskListAdapter extends RecyclerView.Adapter<taskListAdapter.ViewHo
                 viewHolder.monInfo.setText(month);
                 viewHolder.dayInfo.setText(wee);
 
-
             }
 
 
@@ -184,7 +181,7 @@ public class taskListAdapter extends RecyclerView.Adapter<taskListAdapter.ViewHo
                     return false;
                 }
             });
-            
+
             viewHolder.taskCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -195,7 +192,7 @@ public class taskListAdapter extends RecyclerView.Adapter<taskListAdapter.ViewHo
                                 .set(completedTask).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void unused) {
-                                        //viewHolder.taskCheckbox.setChecked(true);
+                                        viewHolder.taskCheckbox.setChecked(true);
                                         viewHolder.taskStatus.setTextColor(Color.parseColor("#9CFF2E"));
                                         viewHolder.taskStatus.setText("Completed");
                                     }

@@ -37,9 +37,7 @@ import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
 
-    /*TextView userName;
-    TextView userMail;
-    ImageView userPhoto;*/
+
     RecyclerView taskRv;
     Activity activity = getActivity();
     FirebaseFirestore db;
@@ -90,26 +88,6 @@ public class HomeFragment extends Fragment {
 
 
 
-
-        /*userName = rootView.findViewById(R.id.userName_tv);
-        userMail = rootView.findViewById(R.id.userMail_tv);
-        userPhoto = rootView.findViewById(R.id.userPhoto_tv);*/
-        //View separateLayout = inflater.inflate(R.layout.nav_header,container,false);
-
-        /*userName = separateLayout.findViewById(R.id.userName_tv);
-        userMail = separateLayout.findViewById(R.id.userMail_tv);
-        userPhoto = separateLayout.findViewById(R.id.userPhoto_tv);
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if(currentUser!=null){
-            userName.setText(currentUser.getDisplayName());
-            userMail.setText(currentUser.getEmail());
-            Picasso.get().load(currentUser.getPhotoUrl()).into(userPhoto);
-        }*/
-       /* userName.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-        userMail.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
-        Picasso.get().load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl()).into(userPhoto);*/
-
-
         taskListAdapter = new taskListAdapter(dataList);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext(),RecyclerView.VERTICAL,false);
@@ -125,7 +103,6 @@ public class HomeFragment extends Fragment {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-
 
                                 taskModel taskModel= document.toObject(taskModel.class);
                                 taskModel.setTaskIdm(document.getId());

@@ -1,17 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".features.Pomodoro_Fragment">
+    tools:context=".features.Pomodoro_Fragment"
+    android:layout_marginBottom="110dp">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="PomoDoro"
-        android:gravity="center"
-        android:textColor="@color/red"
-        android:textSize="30sp"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Focus>"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:layout_centerInParent="true"
+        android:layout_above="@+id/progress_circular"
+        android:layout_marginBottom="40dp"
+        />
 
-</FrameLayout>
+    <ProgressBar
+        android:id="@+id/progress_circular"
+        android:layout_width="270dp"
+        android:layout_height="270dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/time_circle_2"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="100"
+        android:progressDrawable="@drawable/time_circle_1"
+        android:rotation="-90"
+        style="?android:attr/progressBarStyleHorizontal"
+        />
+
+    <EditText
+        android:id="@+id/txtTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/txtView"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="20dp"
+        android:text="00:00"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/txtView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="00:00"
+        android:textColor="@color/white"
+        android:textSize="33sp" />
+
+    <!-- ... (other layout components) -->
+
+    <Button
+        android:id="@+id/startButton"
+        android:backgroundTint="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/progress_circular"
+        android:layout_marginTop="50dp"
+        android:text="Start"
+        android:textColor="@color/black"/>
+
+
+</RelativeLayout>

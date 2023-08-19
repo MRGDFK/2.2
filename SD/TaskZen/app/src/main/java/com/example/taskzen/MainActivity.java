@@ -2,6 +2,7 @@ package com.example.taskzen;
 
 import static android.app.PendingIntent.getActivity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -12,12 +13,16 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +41,8 @@ import com.example.taskzen.features.Calendar_Fragment;
 import com.example.taskzen.features.Habits_Fragment;
 import com.example.taskzen.features.HomeFragment;
 import com.example.taskzen.features.Pomodoro_Fragment;
+import com.example.taskzen.logIn.logIn_activity;
+import com.example.taskzen.notes.noteActivity;
 import com.example.taskzen.taskActivity.addTask_Dialog;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -50,7 +57,7 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity { //implements createTaskBottom.setRefreshListener
 
     NavigationView navView;
-    FloatingActionButton fab;
+    FloatingActionButton fab,logT;
     DrawerLayout drawerLayout;
     BottomNavigationView bottomNavigationView;
 
@@ -78,35 +85,55 @@ public class MainActivity extends AppCompatActivity { //implements createTaskBot
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        createNotificationChannel();
         setContentView(R.layout.activity_main);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         fab = findViewById(R.id.fab);
+        logT = findViewById(R.id.logout);
 
         taskDate = findViewById(R.id.Task_Date);
         drawerLayout = findViewById(R.id.drawer_layout);
-         NavigationView navigationView = findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navView = findViewById(R.id.nav_view);
         Toolbar toolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open_nav,R.string.close_nav);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        if (savedInstanceState==null)
-        {
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,new HomeFragment()).commit();
-            navigationView.setCheckedItem(R.id.nav_home);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, new HomeFragment()).commit();
+            //navigationView.setCheckedItem(R.id.nav_logout);
         }
+        navView.setNavigationItemSelectedListener(menuItem ->{
+            int menuId = menuItem.getItemId();
+            if(menuId == R.id.nav_logout)
+            {
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(MainActivity.this, logIn_activity.class));
+                finish();
+            }
+            return true;
+        });
+        navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if(item.getItemId()==R.id.nav_logout){
+                    FirebaseAuth.getInstance().signOut();
+                    startActivity(new Intent(MainActivity.this, logIn_activity.class));
+                    finish();
+                    return true;
+                }
+                return false;
+            }
+        });
 
         replaceFragment(new HomeFragment());
-
-
         bottomNavigationView.setBackground(null);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if(id == R.id.tasks){
                 replaceFragment(new HomeFragment());
-               /* Intent i = new Intent(MainActivity.this, task_home_activity.class);
-                startActivity(i);*/
             }
             if(id == R.id.calendar){
                 replaceFragment(new Calendar_Fragment());
@@ -119,20 +146,27 @@ public class MainActivity extends AppCompatActivity { //implements createTaskBot
             }
             return true;
         });
+        logT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(MainActivity.this,logIn_activity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                startActivity(new Intent(MainActivity.this, addTask_Dialog.class));
+                //startActivity(new Intent(MainActivity.this, addTask_Dialog.class));
+                showBottomDialog();
             }
         });
-        navView = findViewById(R.id.nav_view);
-        View headerView = navView.getHeaderView(0);
-        /*
-        LayoutInflater inflater = getLayoutInflater();
-        View separateLayout = inflater.inflate(R.layout.nav_header, null);*/
 
+        View headerView = navView.getHeaderView(0);
         userName = headerView.findViewById(R.id.userName_tv);
         userMail = headerView.findViewById(R.id.userMail_tv);
         userPhoto = headerView.findViewById(R.id.userPhoto_tv);
@@ -143,6 +177,23 @@ public class MainActivity extends AppCompatActivity { //implements createTaskBot
             Picasso.get().load(currentUser.getPhotoUrl()).into(userPhoto);
         }
 
+
+
+
+
+
+    }
+
+    private void createNotificationChannel() {
+        CharSequence name = "TaskZen Reminder Chennel";
+        String description = "Cannel for alarm & Notification";
+        int imp = NotificationManager.IMPORTANCE_HIGH;
+        NotificationChannel channel = new NotificationChannel("TaskZen",name,imp);
+        channel.setDescription(description);
+
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
+
     }
     //Outside Oncreate
 
@@ -151,6 +202,54 @@ public class MainActivity extends AppCompatActivity { //implements createTaskBot
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
+    }
+
+    private void showBottomDialog() {
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottomsheetlayout);
+
+        LinearLayout taskLayout = dialog.findViewById(R.id.layoutTask);
+        LinearLayout notesLayout = dialog.findViewById(R.id.layoutNotes);
+        ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
+
+        taskLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+                //Toast.makeText(MainActivity.this,"Upload a Video is clicked",Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MainActivity.this, addTask_Dialog.class));
+
+            }
+        });
+
+        notesLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+               // Toast.makeText(MainActivity.this,"Create a short is Clicked",Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MainActivity.this, noteActivity.class));
+
+            }
+        });
+
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+
     }
 
 

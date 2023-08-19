@@ -183,10 +183,13 @@
         android:orientation="horizontal">
 
         <Button
-            android:background="@drawable/add_task_bg"
+
+            android:backgroundTint="@color/black"
             android:id="@+id/add_Task"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="300dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="33dp"
+            android:layout_height="50dp"
             android:text="Add Task"
             android:textColor="@color/white"
             />
