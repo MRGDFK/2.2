@@ -15,6 +15,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -44,9 +45,16 @@ import com.example.taskzen.features.Pomodoro_Fragment;
 import com.example.taskzen.logIn.logIn_activity;
 import com.example.taskzen.notes.noteActivity;
 import com.example.taskzen.taskActivity.addTask_Dialog;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.EmailAuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -70,6 +78,7 @@ public class MainActivity extends AppCompatActivity { //implements createTaskBot
     TextView userName;
     TextView userMail;
     ImageView userPhoto;
+    ClipData.Item logout;
 
 
     MainActivity activity;
@@ -91,6 +100,7 @@ public class MainActivity extends AppCompatActivity { //implements createTaskBot
         fab = findViewById(R.id.fab);
         logT = findViewById(R.id.logout);
 
+
         taskDate = findViewById(R.id.Task_Date);
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -103,31 +113,8 @@ public class MainActivity extends AppCompatActivity { //implements createTaskBot
         toggle.syncState();
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, new HomeFragment()).commit();
-            //navigationView.setCheckedItem(R.id.nav_logout);
+            navigationView.setCheckedItem(R.id.nav_home);
         }
-        navView.setNavigationItemSelectedListener(menuItem ->{
-            int menuId = menuItem.getItemId();
-            if(menuId == R.id.nav_logout)
-            {
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(MainActivity.this, logIn_activity.class));
-                finish();
-            }
-            return true;
-        });
-        navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if(item.getItemId()==R.id.nav_logout){
-                    FirebaseAuth.getInstance().signOut();
-                    startActivity(new Intent(MainActivity.this, logIn_activity.class));
-                    finish();
-                    return true;
-                }
-                return false;
-            }
-        });
-
         replaceFragment(new HomeFragment());
         bottomNavigationView.setBackground(null);
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -149,10 +136,28 @@ public class MainActivity extends AppCompatActivity { //implements createTaskBot
         logT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(MainActivity.this,logIn_activity.class);
+                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken(getString(R.string.default_web_client_id))
+                        .requestEmail()
+                        .build();
+
+               /* Intent intent = new Intent(MainActivity.this,logIn_activity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                finish();*/
+                GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(MainActivity.this, gso);
+                googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // After signing out from Google, start the login activity
+                        Intent intent = new Intent(MainActivity.this, logIn_activity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
             }
         });
 
@@ -252,5 +257,11 @@ public class MainActivity extends AppCompatActivity { //implements createTaskBot
 
     }
 
+    public void item_logout(){
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(MainActivity.this,logIn_activity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
 
 }
